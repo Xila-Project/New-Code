@@ -4,3 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+Drivers = { version = "0.1.0", path = "../Drivers" }
+File_system = { version = "0.1.0", path = "../File_system" }
+Task = { version = "0.1.0", path = "../Task" }
+Users = { version = "0.1.0", path = "../Users" }
+Virtual_machine = { version = "0.1.0", path = "../Virtual_machine" }
+log = "0.4.22"
