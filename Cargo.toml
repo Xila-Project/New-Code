@@ -8,7 +8,8 @@ members = [
     "Modules/Screen",
     "Modules/Task",
     "Modules/Users",
-    "Modules/Drivers", "Modules/Initialize",
+    "Modules/Drivers",
+    "Modules/Initialize",
 ]
 exclude = [
     "Build_tool",
