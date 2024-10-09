@@ -10,7 +10,6 @@ mod Module;
 mod Registrable;
 mod Runtime;
 
-use Virtual_file_system::Virtual_file_system_type;
 // For
 #[allow(unused_imports)]
 use ABI::*;
@@ -24,7 +23,7 @@ pub use wamr_rust_sdk::value::WasmValue;
 pub use Data::*;
 pub use Environment::*;
 pub use Error::*;
-use File_system::{Device_trait, Device_type, Size_type};
+use File_system::{Device_trait, Device_type, Size_type, Virtual_file_system_type};
 pub use Instance::*;
 pub use Module::*;
 pub use Registrable::*;

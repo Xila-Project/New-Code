@@ -7,7 +7,6 @@ mod Permission;
 mod Position;
 mod Size;
 mod Statistics;
-mod Type;
 
 pub use Entry::*;
 pub use Flags::*;
@@ -18,7 +17,6 @@ pub use Permission::*;
 pub use Position::*;
 pub use Size::*;
 pub use Statistics::*;
-pub use Type::*;
 
 #[repr(transparent)]
 pub struct Block_type(pub [u8; 512]);

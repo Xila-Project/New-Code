@@ -3,18 +3,17 @@ use std::{collections::BTreeMap, sync::RwLock};
 use Task::Task_identifier_type;
 use Users::{Group_identifier_type, User_identifier_type};
 
-use File_system::{
-    Device_type, Entry_type, File_identifier_type, Metadata_type, Mode_type, Open_type,
-    Statistics_type, Time_type, Type_type,
+use crate::{
+    Device::{self, Device_type},
+    Entry_type, File_identifier_type, Metadata_type, Mode_type, Open_type, Pipe, Statistics_type,
+    Type_type,
 };
 
-use File_system::{
+use super::{
     Error_type, File_system_identifier_type, File_system_traits, Flags_type, Path_owned_type,
     Path_type, Permissions_type, Position_type, Result_type, Size_type, Status_type,
     Unique_file_identifier_type,
 };
-
-use crate::{Device, Pipe};
 
 struct Internal_file_system_type {
     pub Mount_point: Path_owned_type,
@@ -547,11 +546,9 @@ impl Virtual_file_system_type {
             Type_type::Character_device
         };
 
-        let Current_time: Time_type = Time::Get_instance().Get_current_time().into();
-
         // Set the metadata of the special file.
-        let mut Metadata = Metadata_type::Get_default(Task, Type, Current_time)
-            .ok_or(Error_type::Invalid_parameter)?;
+        let mut Metadata =
+            Metadata_type::Get_default(Task, Type).ok_or(Error_type::Invalid_input)?;
         Metadata.Set_inode(Inode);
 
         File_system.Set_metadata_from_path(Relative_path, &Metadata)?;
@@ -579,10 +576,8 @@ impl Virtual_file_system_type {
 
         let Inode = self.Pipe_file_system.Create_named_pipe(Size)?;
 
-        let Current_time: Time_type = Time::Get_instance().Get_current_time().into();
-
-        let mut Metadata = Metadata_type::Get_default(Task, Type_type::Pipe, Current_time)
-            .ok_or(Error_type::Invalid_parameter)?;
+        let mut Metadata =
+            Metadata_type::Get_default(Task, Type_type::Pipe).ok_or(Error_type::Invalid_input)?;
         Metadata.Set_inode(Inode);
 
         File_system.Set_metadata_from_path(Relative_path, &Metadata)?;
@@ -1037,8 +1032,6 @@ impl Virtual_file_system_type {
 
 #[cfg(test)]
 mod Tests {
-    use File_system::Local_file_identifier_type;
-
     use super::*;
 
     struct Dummy_file_system_type;
@@ -1049,11 +1042,11 @@ mod Tests {
             _: Task_identifier_type,
             _: &Path_type,
             _: Flags_type,
-        ) -> Result_type<Local_file_identifier_type> {
+        ) -> Result_type<crate::Local_file_identifier_type> {
             todo!()
         }
 
-        fn Close(&self, _: Local_file_identifier_type) -> Result_type<()> {
+        fn Close(&self, _: crate::Local_file_identifier_type) -> Result_type<()> {
             todo!()
         }
 
@@ -1063,17 +1056,17 @@ mod Tests {
 
         fn Duplicate(
             &self,
-            _: Local_file_identifier_type,
-        ) -> Result_type<Local_file_identifier_type> {
+            _: crate::Local_file_identifier_type,
+        ) -> Result_type<crate::Local_file_identifier_type> {
             todo!()
         }
 
         fn Transfert(
             &self,
             _: Task_identifier_type,
-            _: Local_file_identifier_type,
+            _: crate::Local_file_identifier_type,
             _: Option<File_identifier_type>,
-        ) -> Result_type<Local_file_identifier_type> {
+        ) -> Result_type<crate::Local_file_identifier_type> {
             todo!()
         }
 
@@ -1081,11 +1074,15 @@ mod Tests {
             todo!()
         }
 
-        fn Read(&self, _: Local_file_identifier_type, _: &mut [u8]) -> Result_type<Size_type> {
+        fn Read(
+            &self,
+            _: crate::Local_file_identifier_type,
+            _: &mut [u8],
+        ) -> Result_type<Size_type> {
             todo!()
         }
 
-        fn Write(&self, _: Local_file_identifier_type, _: &[u8]) -> Result_type<Size_type> {
+        fn Write(&self, _: crate::Local_file_identifier_type, _: &[u8]) -> Result_type<Size_type> {
             todo!()
         }
 
@@ -1095,13 +1092,13 @@ mod Tests {
 
         fn Set_position(
             &self,
-            _: Local_file_identifier_type,
+            _: crate::Local_file_identifier_type,
             _: &Position_type,
         ) -> Result_type<Size_type> {
             todo!()
         }
 
-        fn Flush(&self, _: Local_file_identifier_type) -> Result_type<()> {
+        fn Flush(&self, _: crate::Local_file_identifier_type) -> Result_type<()> {
             todo!()
         }
 
@@ -1113,31 +1110,37 @@ mod Tests {
             &self,
             _: &Path_type,
             _: Task_identifier_type,
-        ) -> Result_type<Local_file_identifier_type> {
+        ) -> Result_type<crate::Local_file_identifier_type> {
             todo!()
         }
 
-        fn Read_directory(&self, _: Local_file_identifier_type) -> Result_type<Option<Entry_type>> {
+        fn Read_directory(
+            &self,
+            _: crate::Local_file_identifier_type,
+        ) -> Result_type<Option<Entry_type>> {
             todo!()
         }
 
         fn Set_position_directory(
             &self,
-            _: Local_file_identifier_type,
+            _: crate::Local_file_identifier_type,
             _: Size_type,
         ) -> Result_type<()> {
             todo!()
         }
 
-        fn Get_position_directory(&self, _: Local_file_identifier_type) -> Result_type<Size_type> {
+        fn Get_position_directory(
+            &self,
+            _: crate::Local_file_identifier_type,
+        ) -> Result_type<Size_type> {
             todo!()
         }
 
-        fn Rewind_directory(&self, _: Local_file_identifier_type) -> Result_type<()> {
+        fn Rewind_directory(&self, _: crate::Local_file_identifier_type) -> Result_type<()> {
             todo!()
         }
 
-        fn Close_directory(&self, _: Local_file_identifier_type) -> Result_type<()> {
+        fn Close_directory(&self, _: crate::Local_file_identifier_type) -> Result_type<()> {
             todo!()
         }
 
@@ -1149,15 +1152,18 @@ mod Tests {
             todo!()
         }
 
-        fn Get_statistics(&self, _: Local_file_identifier_type) -> Result_type<Statistics_type> {
+        fn Get_statistics(
+            &self,
+            _: crate::Local_file_identifier_type,
+        ) -> Result_type<Statistics_type> {
             todo!()
         }
 
-        fn Get_mode(&self, _: Local_file_identifier_type) -> Result_type<Mode_type> {
+        fn Get_mode(&self, _: crate::Local_file_identifier_type) -> Result_type<Mode_type> {
             todo!()
         }
 
-        fn Get_metadata(&self, _: Local_file_identifier_type) -> Result_type<Metadata_type> {
+        fn Get_metadata(&self, _: crate::Local_file_identifier_type) -> Result_type<Metadata_type> {
             todo!()
         }
     }

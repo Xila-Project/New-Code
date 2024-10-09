@@ -2,12 +2,22 @@ use std::fmt::Debug;
 
 use Task::Task_identifier_type;
 
-use File_system::{
+use super::{
     Flags_type, Path_type, Position_type, Result_type, Size_type, Status_type,
-    Unique_file_identifier_type,
+    Unique_file_identifier_type, Virtual_file_system::Virtual_file_system_type,
 };
 
-use super::Virtual_file_system_type;
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[repr(u8)]
+pub enum Type_type {
+    File,
+    Directory,
+    Block_device,
+    Character_device,
+    Pipe,
+    Socket,
+    Symbolic_link,
+}
 
 /// File structure.
 ///

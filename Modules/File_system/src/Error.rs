@@ -31,7 +31,7 @@ pub enum Error_type {
     Not_initialized,
     Failed_to_get_users_manager_instance,
     Failed_to_get_task_manager_instance,
-    Invalid_parameter,
+    Invalid_input,
     Invalid_flags,
     Not_directory,
     Is_directory,
@@ -42,7 +42,6 @@ pub enum Error_type {
     Name_too_long,
     Corrupted,
     No_memory,
-    No_space_left,
     Other,
 }
 
